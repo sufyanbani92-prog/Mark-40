@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="ur" dir="rtl">
+    <!DOCTYPE html>
+<html lang="ur">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mark 40 - Jarvis Interface</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: #050b14;
             color: #00ffff;
@@ -21,22 +16,7 @@
             align-items: center;
             overflow: hidden;
             position: relative;
-        }
-        /* High-tech background grid & glow */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background-image: linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: -1;
-            animation: gridMove 20s linear infinite;
-        }
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-30px, -30px); }
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         header {
             width: 100%;
@@ -46,7 +26,8 @@
             border-bottom: 2px solid #00ffff;
             font-size: 1.2rem;
             letter-spacing: 2px;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            z-index: 10;
         }
         .main-container {
             flex: 1;
@@ -54,88 +35,75 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 100%;
             padding: 20px;
+            z-index: 10;
         }
-        /* Status message box */
-        #status-box {
+        .status-box {
             background: rgba(0, 30, 60, 0.9);
             border: 1px solid #00ffff;
             padding: 12px 20px;
             border-radius: 8px;
             margin-bottom: 30px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0,255,255,0.2);
             max-width: 90%;
-            font-size: 0.95rem;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
         }
-        /* Arc Reactor Mic Button Style */
         .arc-reactor {
             width: 130px;
             height: 130px;
             border-radius: 50%;
-            background: radial-gradient(circle, #00ffff 0%, #004466 60%, #020b14 100%);
-            border: 4px solid #00ffff;
+            border: 3px dashed #00ffff;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 0 30px #00ffff, inset 0 0 20px #00ffff;
-            animation: pulseReactor 2s infinite alternate;
-            position: relative;
+            background: radial-gradient(circle, rgba(0,255,255,0.2) 0%, rgba(5,11,20,0.8) 70%);
+            box-shadow: 0 0 25px #00ffff, inset 0 0 15px #00ffff;
+            animation: pulse 2s infinite;
         }
-        .arc-reactor::after {
-            content: "";
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            border: 2px dashed rgba(255, 255, 255, 0.6);
+        .arc-inner {
+            width: 60px;
+            height: 60px;
+            background: #00ffff;
             border-radius: 50%;
-            animation: spin 10s linear infinite;
+            box-shadow: 0 0 20px #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
         }
-        @keyframes pulseReactor {
-            0% { transform: scale(1); box-shadow: 0 0 20px #00ffff; }
-            100% { transform: scale(1.05); box-shadow: 0 0 40px #00ffff, 0 0 60px rgba(0,255,255,0.6); }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 15px #00ffff; }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px #00ffff; }
+            100% { transform: scale(1); box-shadow: 0 0 15px #00ffff; }
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .arc-inner-icon {
-            font-size: 2rem;
-            color: #fff;
-            z-index: 2;
-        }
-        /* Input & Controls Footer */
         footer {
             width: 100%;
             padding: 15px;
-            background: rgba(0, 10, 20, 0.9);
+            background: rgba(0, 20, 40, 0.9);
             display: flex;
             gap: 10px;
-            justify-content: center;
-            align-items: center;
-            border-top: 1px solid rgba(0, 255, 255, 0.3);
+            border-top: 1px solid #00ffff;
+            z-index: 10;
         }
         input[type="text"] {
-            width: 70%;
+            flex: 1;
             padding: 12px;
-            background: #020b14;
+            background: #030a12;
             border: 1px solid #00ffff;
             color: #00ffff;
-            border-radius: 6px;
+            border-radius: 5px;
             outline: none;
             font-size: 1rem;
         }
         button.send-btn {
-            padding: 12px 20px;
             background: #00ffff;
-            color: #050b14;
+            color: #030a12;
             border: none;
-            border-radius: 6px;
+            padding: 0 20px;
+            border-radius: 5px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(0,255,255,0.5);
         }
     </style>
 </head>
@@ -144,30 +112,52 @@
     <header>MARK 40 - JARVIS INTERFACE</header>
 
     <div class="main-container">
-        <div id="status-box">
-            🔒 سسٹم لاک ہے سفیان سر! انلاک کرنے کے لیے کمانڈ دیں: "چلو جارویس کام پہ لگ جاؤ"
+        <div id="status-box" class="status-box">
+            سفیان سر، آرک رییکٹر آن لائن ہے۔ مائیک دبائیں یا کمانڈ دیں۔
         </div>
 
-        <!-- Arc Reactor Voice / Click Trigger -->
         <div class="arc-reactor" onclick="triggerJarvis()">
-            <div class="arc-inner-icon">🎙️</div>
+            <div class="arc-inner">🎙️</div>
         </div>
     </div>
 
     <footer>
-        <input type="text" id="user-input" placeholder="کمانڈ درج کریں سفیان سر...">
+        <input type="text" id="user-input" placeholder="یہاں کمانڈ لکھیں...">
         <button class="send-btn" onclick="sendText()">ارسال</button>
     </footer>
 
     <script>
-        function triggerJarvis() {
-            alert("سفیان سر، آرک ری ایکٹر ایکٹیو ہو گیا ہے! کمانڈ دیں: چلو جارویس کام پہ لگ جاؤ");
+        function speak(text) {
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ur-PK'; // اردو زبان
+            window.speechSynthesis.speak(utterance);
         }
+
+        function triggerJarvis() {
+            speak("سفیان بھائی، جارویس آپ کی خدمت میں حاضر ہے۔ فرمائیے کیا حکم ہے؟");
+            document.getElementById("status-box").innerText = "جارویس سن رہا ہے...";
+            
+            // وائس رికگنیشن شروع کرنا
+            try {
+                let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = 'ur-PK';
+                recognition.onresult = function(event) {
+                    let command = event.results[0][0].transcript;
+                    document.getElementById("user-input").value = command;
+                    document.getElementById("status-box").innerText = "موصول ہوا: " + command;
+                    speak("آپ نے کہا: " + command);
+                };
+                recognition.start();
+            } catch (e) {
+                alert("سفیان سر، براؤزر میں وائس سپورٹ چیک کریں۔");
+            }
+        }
+
         function sendText() {
-            let txt = document.getElementById('user-input').value;
+            let txt = document.getElementById("user-input").value;
             if(txt) {
-                alert("موصول ہوا سفیان سر: " + txt);
-                document.getElementById('user-input').value = '';
+                document.getElementById("status-box").innerText = "عمل جاری ہے: " + txt;
+                speak("سفیان بھائی، آپ کا حکم مل گیا ہے، پروجیکٹ پر کام شروع ہے۔");
             }
         }
     </script>
