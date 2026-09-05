@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARK 40 - SOFYAN JARVIS AI</title>
+    <title>MARK 40 - SUFYAN JARVIS AI</title>
     <style>
         body {
             background-color: #050b14;
@@ -84,7 +84,7 @@
 </head>
 <body>
 
-    <h1>MARK 40 - SOFYAN JARVIS AI</h1>
+    <h1>MARK 40 - SUFYAN JARVIS AI</h1>
 
     <div class="chat-box" id="responseBox">
         جی سفیان بھائی، آپ کی خدمت میں ہمیشہ حاضر ہوں، آج ہم کس پروجیکٹ پر کام کرنے والے ہیں؟
@@ -100,17 +100,62 @@
     <script>
         const GEMINI_API_KEY = "AQ.Ab8RN6JHKRsI93U5QK3XkIlCvoxueRdFPS-zjAJYPFTY8M36xg";
 
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ur-PK';
+            utterance.rate = 0.95;
+            utterance.pitch = 1.05;
+            window.speechSynthesis.speak(utterance);
+        }
+
         function activateJarvis() {
+            const status = document.getElementById('statusText');
+            status.innerText = "سن رہا ہوں سفیان بھائی...";
+            
+            try {
+                let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = 'ur-PK';
+                recognition.interimResults = false;
+
+                recognition.onresult = async (event) => {
+                    let spokenText = event.results[0][0].transcript;
+                    status.innerText = "پروسیسنگ ہو رہی ہے...";
+                    await processQuery(spokenText);
+                };
+
+                recognition.onerror = () => {
+                    status.innerText = "آواز کی شناخت نہیں ہو سکی، دوبارہ کوشش کریں۔";
+                };
+
+                recognition.start();
+            } catch (e) {
+                status.innerText = "براؤزر میں وائس ریکگنیشن سپورٹ موجود نہیں۔";
+            }
+        }
+
+        async function processQuery(query) {
             const box = document.getElementById('responseBox');
             const status = document.getElementById('statusText');
             
-            status.innerText = "سن رہا ہوں سفیان بھائی...";
-            box.innerText = "جی سفیان بھائی، آپ کی خدمت میں ہمیشہ حاضر ہوں، آج ہم کس پروجیکٹ پر کام کرنے والے ہیں؟";
-            
-            if ('speechSynthesis' in window) {
-                const speech = new SpeechSynthesisUtterance("جی سفیان بھائی، آپ کی خدمت میں ہمیشہ حاضر ہوں، آج ہم کس پروجیکٹ پر کام کرنے والے ہیں؟");
-                speech.lang = 'ur-PK';
-                window.speechSynthesis.speak(speech);
+            try {
+                let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: "You are Jarvis, an AI assistant built for Sufyan from Haripur who works in furniture design in Rawalpindi. Always talk like a caring friend and tech AI assistant in Urdu. User said: " + query }] }]
+                    })
+                });
+
+                let data = await response.json();
+                let reply = data.candidates[0].content.parts[0].text;
+                
+                box.innerText = reply;
+                status.innerText = "سسٹم آن لائن ہے - آپ کے اشارے کی دیر ہے";
+                speak(reply);
+            } catch (error) {
+                box.innerText = "معذرت سفیان بھائی، نیٹ ورک میں کوئی مسئلہ آگیا ہے۔";
+                status.innerText = "خرابی کا سامنا ہے";
             }
         }
     </script>
