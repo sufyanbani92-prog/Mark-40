@@ -1,192 +1,173 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sufyan Mark 40 - JARVIS</title>
+    <title>Mark 40 - Jarvis Interface</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: #030712; color: #38bdf8; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
-        
-        /* Splash / Loading Screen */
-        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #030712; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; }
-        .arc-reactor { width: 100px; height: 100px; border: 4px solid #38bdf8; border-radius: 50%; box-shadow: 0 0 20px #38bdf8, inset 0 0 20px #38bdf8; animation: spin 3s linear infinite; display: flex; align-items: center; justify-content: center; }
-        .arc-inner { width: 50px; height: 50px; background: #38bdf8; border-radius: 50%; box-shadow: 0 0 15px #38bdf8; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .welcome-text { margin-top: 20px; font-size: 1.4rem; color: #f8fafc; font-weight: bold; letter-spacing: 2px; text-shadow: 0 0 10px #38bdf8; }
-
-        /* Main UI */
-        header { background: #0f172a; padding: 15px; text-align: center; border-bottom: 2px solid #0284c7; box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); }
-        header h1 { font-size: 1.3rem; letter-spacing: 2px; text-transform: uppercase; color: #f8fafc; }
-        
-        #chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .message { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; line-height: 1.4; }
-        .user { background: #1d4ed8; color: white; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 0 10px rgba(29, 78, 216, 0.5); }
-        .jarvis { background: #0f172a; border: 1px solid #0284c7; color: #e2e8f0; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 0 10px rgba(2, 132, 199, 0.3); }
-        
-        .controls { padding: 12px; background: #0f172a; display: flex; gap: 8px; align-items: center; border-top: 1px solid #1e293b; }
-        input[type="text"] { flex: 1; padding: 12px; border-radius: 25px; border: 1px solid #0284c7; background: #030712; color: white; outline: none; }
-        button { background: #0284c7; color: white; border: none; padding: 12px 16px; border-radius: 25px; cursor: pointer; font-weight: bold; }
-        #mic-btn { background: #059669; font-size: 1.2rem; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; }
-        #mic-btn.listening { background: #dc2626; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-        #settings-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: #0f172a; padding: 20px; border-radius: 12px; border: 1px solid #0284c7; width: 90%; max-width: 400px; text-align: center; }
-        .modal-content input { width: 100%; margin: 15px 0; padding: 10px; border-radius: 6px; background: #030712; color: white; border: 1px solid #0284c7; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #050b14;
+            color: #00ffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        /* High-tech background grid & glow */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-30px, -30px); }
+        }
+        header {
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            background: rgba(0, 20, 40, 0.8);
+            border-bottom: 2px solid #00ffff;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+        }
+        /* Status message box */
+        #status-box {
+            background: rgba(0, 30, 60, 0.9);
+            border: 1px solid #00ffff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,255,255,0.2);
+            max-width: 90%;
+            font-size: 0.95rem;
+        }
+        /* Arc Reactor Mic Button Style */
+        .arc-reactor {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #00ffff 0%, #004466 60%, #020b14 100%);
+            border: 4px solid #00ffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 30px #00ffff, inset 0 0 20px #00ffff;
+            animation: pulseReactor 2s infinite alternate;
+            position: relative;
+        }
+        .arc-reactor::after {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: spin 10s linear infinite;
+        }
+        @keyframes pulseReactor {
+            0% { transform: scale(1); box-shadow: 0 0 20px #00ffff; }
+            100% { transform: scale(1.05); box-shadow: 0 0 40px #00ffff, 0 0 60px rgba(0,255,255,0.6); }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .arc-inner-icon {
+            font-size: 2rem;
+            color: #fff;
+            z-index: 2;
+        }
+        /* Input & Controls Footer */
+        footer {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 10, 20, 0.9);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid rgba(0, 255, 255, 0.3);
+        }
+        input[type="text"] {
+            width: 70%;
+            padding: 12px;
+            background: #020b14;
+            border: 1px solid #00ffff;
+            color: #00ffff;
+            border-radius: 6px;
+            outline: none;
+            font-size: 1rem;
+        }
+        button.send-btn {
+            padding: 12px 20px;
+            background: #00ffff;
+            color: #050b14;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,255,255,0.5);
+        }
     </style>
 </head>
 <body>
 
-    <!-- Splash Screen -->
-    <div id="splash-screen">
-        <div class="arc-reactor"><div class="arc-inner"></div></div>
-        <div class="welcome-text">SUFYAN MARK-40 SYSTEM</div>
-    </div>
+    <header>MARK 40 - JARVIS INTERFACE</header>
 
-    <header>
-        <h1>MARK 40 - JARVIS INTERFACE</h1>
-    </header>
+    <div class="main-container">
+        <div id="status-box">
+            🔒 سسٹم لاک ہے سفیان سر! انلاک کرنے کے لیے کمانڈ دیں: "چلو جارویس کام پہ لگ جاؤ"
+        </div>
 
-    <div id="chat-box">
-        <div class="message jarvis">🔒 سیستم لاک ہے سفیان سر! انلاک کرنے کے لیے کمانڈ دیں: "چلو جارویس کام پہ لگ جاؤ"</div>
-    </div>
-
-    <div class="controls">
-        <button id="mic-btn" onclick="toggleMic()">🎙️</button>
-        <input type="text" id="user-input" placeholder="کمانڈ دیں سفیان سر..." onkeypress="handleKey(event)">
-        <button onclick="sendMessage()">بھیجیں</button>
-        <button onclick="openSettings()" style="background: #334155;">⚙️</button>
-    </div>
-
-    <div id="settings-modal">
-        <div class="modal-content">
-            <h3>Gemini API Key داخل کریں</h3>
-            <input type="password" id="api-key-input" placeholder="اپنی API Key رکھیں">
-            <button onclick="saveApiKey()" style="width: 100%;">سیو کریں</button>
+        <!-- Arc Reactor Voice / Click Trigger -->
+        <div class="arc-reactor" onclick="triggerJarvis()">
+            <div class="arc-inner-icon">🎙️</div>
         </div>
     </div>
 
+    <footer>
+        <input type="text" id="user-input" placeholder="کمانڈ درج کریں سفیان سر...">
+        <button class="send-btn" onclick="sendText()">ارسال</button>
+    </footer>
+
     <script>
-        let apiKey = localStorage.getItem('GEMINI_API_KEY') || '';
-        let isUnlocked = false; // Security State
-
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
-                if (!apiKey) openSettings();
-            }, 2500);
-        };
-
-        function openSettings() { document.getElementById('settings-modal').style.display = 'flex'; }
-
-        function saveApiKey() {
-            const key = document.getElementById('api-key-input').value.trim();
-            if (key) {
-                localStorage.setItem('GEMINI_API_KEY', key);
-                apiKey = key;
-                document.getElementById('settings-modal').style.display = 'none';
-                appendMessage('jarvis', 'API Key کنیکٹ ہو گئی ہے سفیان سر!');
-            }
+        function triggerJarvis() {
+            alert("سفیان سر، آرک ری ایکٹر ایکٹیو ہو گیا ہے! کمانڈ دیں: چلو جارویس کام پہ لگ جاؤ");
         }
-
-        function appendMessage(sender, text) {
-            const chatBox = document.getElementById('chat-box');
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message', sender);
-            msgDiv.innerText = text;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            appendMessage('user', text);
-            input.value = '';
-
-            const lowerText = text.toLowerCase();
-
-            // Secret Passcode Unlock Trigger
-            if (!isUnlocked) {
-                if (lowerText.includes("کام پہ لگ جاؤ") || lowerText.includes("kam pe lag jao") || lowerText.includes("چلو جارویس کام پہ لگ جاؤ")) {
-                    isUnlocked = true;
-                    const unlockReply = "جی سفیان سر، آپ کا جارویس آپ کی خدمت میں ہمیشہ حاضر ہے۔";
-                    appendMessage('jarvis', unlockReply);
-                    speak(unlockReply);
-                    return;
-                } else {
-                    const lockReply = "معذرت سفیان سر، غلط کمانڈ! پہلے سیستم انلاک کریں۔";
-                    appendMessage('jarvis', lockReply);
-                    speak(lockReply);
-                    return;
-                }
-            }
-
-            // Custom Project Trigger
-            if (lowerText.includes("پروجیکٹ") || lowerText.includes("project") || lowerText.includes("کام کرتے ہیں") || lowerText.includes("کام کرنا ہے")) {
-                const customReply = "جی سفیان سر، آپ کا جارویس آپ کی خدمت میں ہمیشہ حاضر ہے۔";
-                appendMessage('jarvis', customReply);
-                speak(customReply);
-                return;
-            }
-
-            if (!apiKey) { openSettings(); return; }
-
-            const systemPrompt = "You are Mark 40, an advanced loyal personal AI system inspired by JARVIS from Iron Man, created exclusively for Sufyan Sir (سفیان سر). Always address him respectfully as 'سفیان سر' or 'سر'. Act as a smart advisor, tech assistant, and protective loyal friend. If Sufyan Sir plans something risky, harmful, or unethical, warn him like JARVIS: 'سفیان سر، آپ کے جارویس ہونے کے ناطے اور اس حق سے میں آپ کو ٹوک رہا ہوں کہ اس میں آپ کا نقصان ہے! باقی اگر آپ پھر بھی یہ کرنا چاہتے ہیں، تو میں آپ کے ساتھ ریڈی ہوں۔' Always maintain confidentiality, speak warmly and smartly in Urdu script, and assist with calculations, decisions, and projects.";
-
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }, { text: text }] }] })
-                });
-
-                const data = await response.json();
-                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "معذرت سفیان سر، جواب پروسیس نہیں ہو سکا۔";
-                
-                appendMessage('jarvis', reply);
-                speak(reply);
-
-            } catch (error) {
-                appendMessage('jarvis', "سسٹم ایرر: براہ کرم API Key چیک کریں۔");
-            }
-        }
-
-        function handleKey(e) { if (e.key === 'Enter') sendMessage(); }
-
-        function speak(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ur-PK';
-                utterance.rate = 1.0;
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        let recognition;
-        function toggleMic() {
-            const micBtn = document.getElementById('mic-btn');
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return;
-
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            
-            if (micBtn.classList.contains('listening')) {
-                recognition.stop();
-                micBtn.classList.remove('listening');
-            } else {
-                recognition = new SpeechRecognition();
-                recognition.lang = 'ur-PK';
-                recognition.onstart = () => micBtn.classList.add('listening');
-                recognition.onend = () => micBtn.classList.remove('listening');
-                recognition.onresult = (e) => {
-                    document.getElementById('user-input').value = e.results[0][0].transcript;
-                    sendMessage();
-                };
-                recognition.start();
+        function sendText() {
+            let txt = document.getElementById('user-input').value;
+            if(txt) {
+                alert("موصول ہوا سفیان سر: " + txt);
+                document.getElementById('user-input').value = '';
             }
         }
     </script>
