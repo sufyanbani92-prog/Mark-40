@@ -1,120 +1,119 @@
-
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sufian Mark 40 - JARVIS Interface</title>
+    <title>MARK 40 - SOFYAN JARVIS AI</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #030712; color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
-        
-        header { width: 100%; padding: 15px; text-align: center; border-bottom: 2px solid #00ffff; font-size: 1.2rem; font-weight: bold; background: rgba(0, 20, 40, 0.9); box-shadow: 0 0 15px rgba(0, 255, 255, 0.4); }
-        
-        .main-container { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; width: 100%; }
-        
-        #status-box { background: rgba(0, 30, 60, 0.9); border: 1px solid #00ffff; border-radius: 14px; margin-bottom: 35px; padding: 22px; text-align: center; max-width: 90%; min-height: 80px; box-shadow: 0 0 25px rgba(0, 255, 255, 0.3); font-size: 1.1rem; line-height: 1.6; }
-        
-        .arc-reactor { width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, #001f3f 0%, #00ffff 100%); border: 4px solid #00ffff; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 35px #00ffff; animation: pulseReactor 2s infinite; position: relative; }
-        
-        .arc-reactor::after { content: ""; position: absolute; width: 90px; height: 90px; border-radius: 50%; border: 4px solid rgba(255, 255, 255, 0.8); animation: spin 10s linear infinite; }
-        
-        @keyframes pulseReactor { 0% { transform: scale(1); box-shadow: 0 0 20px #00ffff; } 50% { transform: scale(1.06); box-shadow: 0 0 45px #00ffff; } 100% { transform: scale(1); box-shadow: 0 0 20px #00ffff; } }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .inner-mic { width: 60px; height: 60px; border-radius: 50%; background: rgba(0, 10, 20, 0.9); display: flex; justify-content: center; align-items: center; color: #fff; font-size: 1.5rem; }
-        
-        footer { width: 100%; padding: 15px; display: flex; gap: 10px; background: rgba(0, 10, 20, 0.9); border-top: 1px solid #00ffff; }
-        input[type="text"] { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #00ffff; background: #001220; color: #fff; font-size: 1rem; }
-        .send-btn { padding: 0 20px; border-radius: 8px; border: none; background: #00ffff; color: #000; font-weight: bold; cursor: pointer; }
+        body {
+            background-color: #050b14;
+            color: #00ffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 22px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #00ffff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .chat-box {
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 20px;
+            width: 85%;
+            max-width: 400px;
+            min-height: 120px;
+            text-align: center;
+            font-size: 18px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mic-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid #00ffff;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px #00ffff;
+        }
+        .mic-btn {
+            background: radial-gradient(circle, #00ffff 0%, #004466 100%);
+            border: none;
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px #00ffff;
+            z-index: 2;
+            font-size: 40px;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.45); opacity: 0; }
+        }
+        .status {
+            margin-top: 25px;
+            font-size: 15px;
+            color: #88ccff;
+        }
     </style>
 </head>
 <body>
 
-    <header>سفیان بھائی - مارک 40 نظام فعال ہے</header>
+    <h1>MARK 40 - SOFYAN JARVIS AI</h1>
 
-    <div class="main-container">
-        <div id="status-box">جی سفیان بھائی، آپ کا جارویس آپ کی خدمت میں حاضر ہے۔ آرک ری ایکٹر یا مائک پر کلک کریں اور مجھ سے بات کریں۔</div>
-        
-        <div class="arc-reactor" onclick="startListening()" title="مائک آن کرنے کے لیے کلک کریں۔">
-            <div class="inner-mic">🎙️</div>
-        </div>
+    <div class="chat-box" id="responseBox">
+        جی سفیان بھائی، آپ کی خدمت میں ہمیشہ حاضر ہوں، آج ہم کس پروجیکٹ پر کام کرنے والے ہیں؟
     </div>
 
-    <footer>
-        <input type="text" id="user-input" placeholder="یہاں سفیان بھائی اپنا پیغام درج کریں..." onkeypress="handleKeyPress(event)">
-        <button class="send-btn" onclick="sendMessage()">ارسال</button>
-    </footer>
+    <div class="mic-container" onclick="activateJarvis()">
+        <div class="pulse-ring"></div>
+        <button class="mic-btn">🎙️</button>
+    </div>
+
+    <div class="status" id="statusText">سسٹم آن لائن ہے - آپ کے اشارے کی دیر ہے</div>
 
     <script>
-        // یہاں اپنی اصل جیمنی API Key درج کریں
-        const apiKey = "YOUR_GEMINI_API_KEY"; 
+        const GEMINI_API_KEY = "AQ.Ab8RN6JHKRsI93U5QK3XkIlCvoxueRdFPS-zjAJYPFTY8M36xg";
 
-        function speakText(text) {
-            window.speechSynthesis.cancel();
-            let utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ur-PK';
-            utterance.rate = 0.95;
-            utterance.pitch = 1.05;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function startListening() {
-            let statusBox = document.getElementById('status-box');
-            try {
-                let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                recognition.lang = 'ur-PK';
-                recognition.interimResults = false;
-                
-                recognition.onstart = () => { statusBox.innerText = "سن رہا ہوں سفیان بھائی، بولیں..."; };
-                recognition.onresult = (event) => {
-                    let spokenText = event.results[0][0].transcript;
-                    document.getElementById('user-input').value = spokenText;
-                    processQuery(spokenText);
-                };
-                recognition.onerror = () => { statusBox.innerText = "آواز شناخت نہیں ہو سکی، دوبارہ کوشش کریں۔"; };
-                recognition.start();
-            } catch (e) {
-                statusBox.innerText = "براؤزر میں وائس ریکگنیشن سپورٹ موجود نہیں۔";
-            }
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') { sendMessage(); }
-        }
-
-        async function sendMessage() {
-            let inputField = document.getElementById('user-input');
-            let query = inputField.value.trim();
-            if (!query) return;
+        function activateJarvis() {
+            const box = document.getElementById('responseBox');
+            const status = document.getElementById('statusText');
             
-            document.getElementById('status-box').innerText = "سوچ رہا ہوں سفیان بھائی...";
-            inputField.value = "";
+            status.innerText = "سن رہا ہوں سفیان بھائی...";
+            box.innerText = "جی سفیان بھائی، آپ کی خدمت میں ہمیشہ حاضر ہوں، آج ہم کس پروجیکٹ پر کام کرنے والے ہیں؟";
             
-            let reply = await getAIResponse(query);
-            document.getElementById('status-box').innerText = reply;
-            speakText(reply);
-        }
-
-        async function getAIResponse(prompt) {
-            if (!apiKey || apiKey === "YOUR_GEMINI_API_KEY") {
-                return "سفیان بھائی، براہ کرم کوڈ میں اپنی جیمنی API Key درج کریں۔";
-            }
-            try {
-                let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: "آپ سفیان بھائی کے دوست اور پرسنل اے آئی اسسٹنٹ جارویس (Mark 40) ہیں۔ ہمیشہ اردو میں دوستانہ، سمارٹ اور مددگار انداز میں جواب دیں۔ صارف کا نام سفیان بھائی ہے۔ سوال یہ ہے: " + prompt }] }]
-                    })
-                });
-                let data = await response.json();
-                let reply = data.candidates[0].content.parts[0].text;
-                return reply;
-            } catch (error) {
-                return "معذرت سفیان بھائی، انٹرنیٹ کنکشن یا اے آئی سرور میں خرابی کی وجہ سے رابطہ نہیں ہو سکا۔";
+            if ('speechSynthesis' in window) {
+                const speech = new SpeechSynthesisUtterance("جی سفیان بھائی، آپ کی خدمت میں ہمیشہ حاضر ہوں، آج ہم کس پروجیکٹ پر کام کرنے والے ہیں؟");
+                speech.lang = 'ur-PK';
+                window.speechSynthesis.speak(speech);
             }
         }
     </script>
+
 </body>
 </html>
