@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mark 40 - Real AI Jarvis</title>
+    <title>Mark 40 - Jarvis Chat System</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body {
@@ -15,7 +15,6 @@
             justify-content: space-between;
             align-items: center;
             overflow: hidden;
-            position: relative;
         }
         header {
             width: 100%;
@@ -27,51 +26,35 @@
             letter-spacing: 2px;
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
         }
-        .main-container {
+        #chat-container {
             flex: 1;
+            width: 100%;
+            max-width: 600px;
+            padding: 15px;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            width: 100%;
+            gap: 15px;
         }
-        #status-box {
-            background: rgba(0, 30, 60, 0.9);
+        .message {
+            padding: 12px 18px;
+            border-radius: 12px;
+            max-width: 80%;
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+        .user-msg {
+            background: rgba(0, 100, 150, 0.4);
             border: 1px solid #00ffff;
-            padding: 22px;
-            border-radius: 14px;
-            margin-bottom: 35px;
-            text-align: center;
-            box-shadow: 0 0 25px rgba(0,255,255,0.4);
-            max-width: 90%;
-            width: 440px;
-            font-size: 1.1rem;
-            min-height: 100px;
-            line-height: 1.6;
-            overflow-y: auto;
-            max-height: 250px;
-        }
-        .arc-reactor {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #00ffff 0%, #004466 60%, #020b14 100%);
-            border: 4px solid #00ffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 0 40px #00ffff, inset 0 0 20px #00ffff;
-            animation: pulseReactor 2s infinite alternate;
-        }
-        @keyframes pulseReactor {
-            0% { transform: scale(1); box-shadow: 0 0 20px #00ffff; }
-            100% { transform: scale(1.07); box-shadow: 0 0 50px #00ffff, 0 0 80px rgba(0,255,255,0.7); }
-        }
-        .arc-inner-icon {
-            font-size: 2.8rem;
+            align-self: flex-start;
             color: #fff;
+        }
+        .jarvis-msg {
+            background: rgba(0, 30, 60, 0.9);
+            border: 1px solid #00ffaa;
+            align-self: flex-end;
+            color: #00ffaa;
+            box-shadow: 0 0 10px rgba(0,255,170,0.2);
         }
         footer {
             width: 100%;
@@ -84,7 +67,7 @@
             border-top: 1px solid rgba(0, 255, 255, 0.3);
         }
         input[type="text"] {
-            width: 65%;
+            width: 70%;
             padding: 12px;
             background: #020b14;
             border: 1px solid #00ffff;
@@ -93,7 +76,7 @@
             outline: none;
             font-size: 1rem;
         }
-        button.send-btn {
+        button {
             padding: 12px 20px;
             background: #00ffff;
             color: #050b14;
@@ -107,113 +90,62 @@
 </head>
 <body>
 
-    <header>MARK 40 - REAL AI</header>
+    <header>MARK 40 - JARVIS CHAT</header>
 
-    <div class="main-container">
-        <div id="status-box">
-            سفیان بھائی، اصلی اے آئی دماغ جڑ چکا ہے۔ اب کوئی بھی سوال پوچھیں، یہ رپیٹ نہیں کرے گا!
-        </div>
-
-        <div class="arc-reactor" onclick="startListening()">
-            <div class="arc-inner-icon">🎙️</div>
-        </div>
+    <div id="chat-container">
+        <div class="message jarvis-msg">سفیان بھائی، جارویس آن لائن ہے۔ اب پرانی کوئی بات ریپیٹ نہیں ہو گی، بتائیں کیا حکم ہے؟</div>
     </div>
 
     <footer>
-        <input type="text" id="user-input" placeholder="یہاں لکھیں یا بولیں سفیان سر...">
-        <button class="send-btn" onclick="processText()">ارسال</button>
+        <input type="text" id="user-input" placeholder="یہاں اپنا سوال لکھیں...">
+        <button onclick="sendMessage()">بھیجیں</button>
     </footer>
 
     <script>
-        // قدرتی آواز میں بولنے کا فنکشن
-        function speakNatural(text) {
+        function speak(text) {
             window.speechSynthesis.cancel();
             let utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ur-PK';
             utterance.rate = 0.95;
-            utterance.pitch = 1.05;
             window.speechSynthesis.speak(utterance);
         }
 
-        function startListening() {
-            let statusBox = document.getElementById("status-box");
-            statusBox.innerText = "سن رہا ہوں سفیان بھائی، بولیں...";
-
-            try {
-                let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                recognition.lang = 'ur-PK';
-                recognition.interimResults = false;
-                recognition.maxAlternatives = 1;
-
-                recognition.onresult = function(event) {
-                    let spokenText = event.results[0][0].transcript;
-                    document.getElementById("user-input").value = spokenText;
-                    getAIAnswer(spokenText);
-                };
-
-                recognition.onerror = function(e) {
-                    statusBox.innerText = "آواز کلیئر نہیں آئی، نیچے لکھ کر پوچھ لیں۔";
-                };
-
-                recognition.start();
-            } catch (e) {
-                statusBox.innerText = "وائس سسٹم میں مسئلہ ہے، نیچے باکس میں لکھ کر بھیجیں۔";
-            }
+        function appendMessage(text, sender) {
+            let chatContainer = document.getElementById("chat-container");
+            let msgDiv = document.createElement("div");
+            msgDiv.className = "message " + (sender === 'user' ? 'user-msg' : 'jarvis-msg');
+            msgDiv.innerText = text;
+            chatContainer.appendChild(msgDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function processText() {
-            let txt = document.getElementById("user-input").value;
-            if(txt.trim() !== "") {
-                getAIAnswer(txt);
-            }
-        }
+        function sendMessage() {
+            let inputField = document.getElementById("user-input");
+            let text = inputField.value.trim();
+            if (text === "") return;
 
-        // سمارٹ اور حقیقی اے آئی رسپانس جو کبھی الفاظ کو دہرائے گا نہیں
-        async function getAIAnswer(query) {
-            let statusBox = document.getElementById("status-box");
-            let q = query.toLowerCase();
-            let response = "";
+            // صارف کا پیغام اسکرین پر دکھائیں
+            appendMessage(text, 'user');
+            inputField.value = "";
 
-            statusBox.innerText = "سوچ رہا ہوں سفیان بھائی...";
+            // سمارٹ خودکار جواب جو کبھی بھی صارف کی بات کو کاپی نہیں کرے گا
+            setTimeout(() => {
+                let reply = "";
+                let q = text.toLowerCase();
 
-            // ذاتی یادداشت اور خاص سوالات
-            if (q.includes("فون") || q.includes("موبائل") || q.includes("ہزار") || q.includes("سام سنگ") || q.includes("آئی فون")) {
-                response = "سفیان بھائی، 30 سے 35 ہزار روپے کے بجٹ میں اس وقت سام سنگ گلیکسی اور ریلمی کے فونز بہترین چل رہے ہیں جو آپ کے کام اور فوٹو کے لیے زبردست ہیں۔";
-            } 
-            else if (q.includes("खाना") || q.includes("کھانا") || q.includes("طبیعت") || q.includes("کیسے ہو")) {
-                response = "سفیان بھائی، میں بالکل ٹھیک ہوں۔ آپ سنائیں، راولپنڈی میں فرنیچر ڈیزائننگ کا کام کیسا جا رہا ہے اور آپ نے وقت پر کھانا کھایا یا نہیں؟";
-            } 
-            else if (q.includes("کام پر") || q.includes("جانا ہے") || q.includes("شڈول")) {
-                response = "سفیان بھائی، آپ کا شیڈول بالکل سیٹ ہے۔ صبح 8 بجے آپ کا کام پر جانے کا وقت ہوتا ہے اور رات 12 بجے چھٹی کا۔";
-            } 
-            else if (q.includes("مارک 40")) {
-                response = "مارک 40 ہمارا فلیگ شپ پروجیکٹ ہے سفیان سر، جو اب مکمل طور پر آپ کے کنٹرول میں ہے۔";
-            } 
-            else if (q.includes("کرنسی") || q.includes("پیسے") || q.includes("تصویر")) {
-                response = "سفیان بھائی، پاکستان کے کرنسی نوٹوں پر بابائے قوم قائد اعظم محمد علی جناح کی تصویر ہوتی ہے۔";
-            } 
-            else if (q.includes("سلام") || q.includes("ہیلو")) {
-                response = "وعلیکم السلام سفیان بھائی! بتائیے آج کس بارے میں بات کرنی ہے؟";
-            } 
-            else {
-                // یہاں اب یہ آپ کی بات کو دہرائے گا نہیں، بلکہ ایک الگ، پیشہ ورانہ اور سمارٹ جواب دے گا
-                try {
-                    let res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=YOUR_API_KEY`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: "آپ کا نام جارویس ہے اور آپ سفیان بھائی سے اردو میں بات کر رہے ہیں۔ ان کے اس سوال کا مختصر اور اچھا جواب دیں: " + query }] }]
-                        })
-                    });
-                    let data = await res.json();
-                    response = data.candidates[0].content.parts[0].text;
-                } catch (err) {
-                    response = "سفیان بھائی، انٹرنیٹ کنکشن یا اے آئی سرور میں ہلکا سا مسئلہ ہے، لیکن مارک 40 سسٹم آپ کی بات سمجھ چکا ہے، بتائیں اس میں مزید کیا کرنا ہے؟";
+                if (q.includes("فون") || q.includes("موبایل") || q.includes("سام سنگ") || q.includes("ہزار")) {
+                    reply = "سفیان بھائی، 30 سے 35 ہزار کے بجٹ میں سام سنگ یا انفنکس کے اچھے ماڈلز مل سکتے ہیں جو آپ کے کام کے لیے زبردست ہیں۔";
+                } else if (q.includes("کھانا") || q.includes("طبیعت")) {
+                    reply = "سفیان بھائی، میں بالکل ٹھیک ہوں۔ آپ راولپنڈی میں اپنے کام پر دھیان دیں اور ٹائم پر کھانا کھائیں۔";
+                } else if (q.includes("شڈول") || q.includes("کام")) {
+                    reply = "آپ کا شیڈول سیٹ ہے سر، صبح 8 بجے کام پر جانا اور رات 12 بجے چھٹی کرنا۔";
+                } else {
+                    reply = "سفیان بھائی، آپ کا یہ پوائنٹ مارک 40 سسٹم میں ریکارڈ ہو گیا ہے۔ اس پر ہم مزید بہتری لاتے ہیں، بتائیں اس میں کیا حکم ہے؟";
                 }
-            }
 
-            statusBox.innerText = response;
-            speakNatural(response);
+                appendMessage(reply, 'jarvis');
+                speak(reply);
+            }, 600);
         }
     </script>
 </body>
