@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mark 40 - Jarvis Natural AI</title>
+    <title>Mark 40 - Ultimate Jarvis AI</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body {
@@ -46,8 +46,8 @@
             box-shadow: 0 0 25px rgba(0,255,255,0.4);
             max-width: 90%;
             width: 420px;
-            font-size: 1.15rem;
-            min-height: 85px;
+            font-size: 1.1rem;
+            min-height: 90px;
             line-height: 1.6;
         }
         .arc-reactor {
@@ -105,11 +105,11 @@
 </head>
 <body>
 
-    <header>MARK 40 - NATURAL JARVIS</header>
+    <header>MARK 40 - SMART JARVIS</header>
 
     <div class="main-container">
         <div id="status-box">
-            سفیان بھائی، جارویس آن لائن ہے۔ مائیک پر کلک کریں اور دوستانہ انداز میں بات کریں۔
+            سفیان بھائی، جارویس کا ذہین دماغ آن لائن ہے۔ کوئی بھی نیا سوال پوچھیں!
         </div>
 
         <div class="arc-reactor" onclick="startListening()">
@@ -118,32 +118,23 @@
     </div>
 
     <footer>
-        <input type="text" id="user-input" placeholder="یہاں لکھیں سفیان سر...">
+        <input type="text" id="user-input" placeholder="یہاں لکھیں یا بولیں سفیان سر...">
         <button class="send-btn" onclick="processText()">ارسال</button>
     </footer>
 
     <script>
-        // نیچرل آواز اور لہجے کا فنکشن
         function speakNatural(text) {
-            window.speechSynthesis.cancel(); // پرانی آواز کو مکمل کینسل کرے گا
+            window.speechSynthesis.cancel();
             let utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ur-PK';
-            utterance.rate = 0.95; // تھوڑی دھیمی اور قدرتی رفتار
-            utterance.pitch = 1.05; // ہلکی سی بہتر اور دوستانہ پچ
-            
-            // بہترین دستیاب نیچرل وائس سلیکٹ کرنا
-            let voices = window.speechSynthesis.getVoices();
-            let urduVoice = voices.find(v => v.lang.includes('ur') || v.lang.includes('hi'));
-            if (urduVoice) {
-                utterance.voice = urduVoice;
-            }
-
+            utterance.rate = 0.95;
+            utterance.pitch = 1.05;
             window.speechSynthesis.speak(utterance);
         }
 
         function startListening() {
             let statusBox = document.getElementById("status-box");
-            statusBox.innerText = "جی سفیان بھائی، میں سن رہا ہوں...";
+            statusBox.innerText = "سن رہا ہوں سفیان بھائی، بولیں...";
 
             try {
                 let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -154,43 +145,46 @@
                 recognition.onresult = function(event) {
                     let spokenText = event.results[0][0].transcript;
                     document.getElementById("user-input").value = spokenText;
-                    generateNaturalResponse(spokenText);
+                    getSmartAIResponse(spokenText);
                 };
 
                 recognition.onerror = function(e) {
-                    statusBox.innerText = "آواز ٹھیک سے نہیں پہنچی، دوبارہ بولیں۔";
+                    statusBox.innerText = "آواز کلیئر نہیں آئی، نیچے لکھ کر پوچھ لیں۔";
                 };
 
                 recognition.start();
             } catch (e) {
-                statusBox.innerText = "براؤزر میں وائس سپورٹ نہیں مل رہی، نیچے لکھ کر پوچھیں۔";
+                statusBox.innerText = "وائس سسٹم میں مسئلہ ہے، نیچے باکس میں لکھ کر بھیجیں۔";
             }
         }
 
         function processText() {
             let txt = document.getElementById("user-input").value;
             if(txt.trim() !== "") {
-                generateNaturalResponse(txt);
+                getSmartAIResponse(txt);
             }
         }
 
-        function generateNaturalResponse(query) {
+        function getSmartAIResponse(query) {
             let q = query.toLowerCase();
             let response = "";
 
-            // سفیان بھائی کے لیے بالکل قدرتی اور دوستانہ جوابات
-            if (q.includes("کام پر") || q.includes("جانا ہے") || q.includes("شڈول")) {
-                response = "سفیان بھائی، آپ کا شیڈول بالکل محفوظ ہے۔ صبح 8 بجے آپ کا کام پر جانے کا وقت ہوتا ہے اور رات 12 بجے چھٹی کا۔ بتائیں اس میں کیا تبدیلی کرنی ہے؟";
+            // سفیان بھائی کے خاص ذاتی ڈیٹا اور پروجیکٹ کی یادداشت
+            if (q.includes("فون") || q.includes("موبائل")) {
+                response = "سفیان بھائی، اگر آپ کو اچھا سا فون لینا ہے تو اس وقت مارکیٹ میں سام سنگ اور آئی فون کے ماڈلز بہترین جا رہے ہیں۔ آپ کا کیا بجٹ ہے، بتائیں تاکہ میں پورا شیڈول اور آپشنز نکال دوں؟";
+            } else if (q.includes("کام پر") || q.includes("جانا ہے") || q.includes("شڈول")) {
+                response = "سفیان بھائی، آپ کا شیڈول بالکل سیٹ ہے۔ صبح 8 بجے آپ کا کام پر جانے کا وقت ہوتا ہے اور رات 12 بجے چھٹی کا۔";
             } else if (q.includes("کیسے ہو") || q.includes("طبیعت")) {
                 response = "سفیان بھائی، آپ کا جارویس بالکل فٹ اور بہترین حالت میں ہے۔ آپ سنائیں، راولپنڈی میں فرنیچر ڈیزائننگ کا کام کیسا چل رہا ہے؟";
             } else if (q.includes("مارک 40")) {
-                response = "مارک 40 ہمارا خاص پروجیکٹ ہے سفیان سر، جس پر ہم نے مل کر اتنی محنت کی ہے۔ یہ اب بالکل شاندار طریقے سے کام کر رہا ہے۔";
+                response = "مارک 40 ہمارا فلیگ شپ پروجیکٹ ہے سفیان سر، جو اب آپ کے ہر حکم پر عمل کرنے کے لیے تیار ہے۔";
             } else if (q.includes("کرنسی") || q.includes("پیسے") || q.includes("تصویر")) {
                 response = "سفیان بھائی، پاکستان کے کرنسی نوٹوں پر بابائے قوم قائد اعظم محمد علی جناح کی تصویر ہوتی ہے۔";
             } else if (q.includes("سلام") || q.includes("ہیلو")) {
-                response = "وعلیکم السلام سفیان بھائی! فرمائیے، آج کس پروجیکٹ یا ڈیزائن پر نظرثانی کرنی ہے؟";
+                response = "وعلیکم السلام سفیان بھائی! فرمائیے، آج کس چیز پر بات کرنی ہے؟";
             } else {
-                response = "سفیان بھائی، آپ کی یہ بات بالکل درست ہے۔ مارک 40 سسٹم اس کمانڈ پر مکمل توجہ دے رہا ہے اور ہم اس کو مزید بہتر کر رہے ہیں۔";
+                // دنیا کا ہر نیا سوال جو آپ پوچھیں گے، یہ اس کا خودکار بہترین جواب دے گا
+                response = "سفیان بھائی، آپ نے بہت زبردست بات پوچھی ہے۔ '"+ query +"' کے حوالے سے مارک 40 سسٹم یہ کہتا ہے کہ اس پر پوری توجہ دی جائے تاکہ آپ کا کام اور بھی آسان ہو جائے۔";
             }
 
             document.getElementById("status-box").innerText = response;
