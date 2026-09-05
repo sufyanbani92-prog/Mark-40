@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mark 40 - Ultimate Jarvis AI</title>
+    <title>Mark 40 - True Jarvis AI</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body {
@@ -45,10 +45,12 @@
             text-align: center;
             box-shadow: 0 0 25px rgba(0,255,255,0.4);
             max-width: 90%;
-            width: 420px;
+            width: 440px;
             font-size: 1.1rem;
-            min-height: 90px;
+            min-height: 100px;
             line-height: 1.6;
+            overflow-y: auto;
+            max-height: 250px;
         }
         .arc-reactor {
             width: 150px;
@@ -105,11 +107,11 @@
 </head>
 <body>
 
-    <header>MARK 40 - SMART JARVIS</header>
+    <header>MARK 40 - TRUE JARVIS</header>
 
     <div class="main-container">
         <div id="status-box">
-            سفیان بھائی، جارویس کا ذہین دماغ آن لائن ہے۔ کوئی بھی نیا سوال پوچھیں!
+            سفیان بھائی، جارویس کا نیا نظام فعال ہے۔ آپ جو بھی پوچھیں گے، یہ الگ اور درست جواب دے گا!
         </div>
 
         <div class="arc-reactor" onclick="startListening()">
@@ -145,7 +147,7 @@
                 recognition.onresult = function(event) {
                     let spokenText = event.results[0][0].transcript;
                     document.getElementById("user-input").value = spokenText;
-                    getSmartAIResponse(spokenText);
+                    handleJarvisLogic(spokenText);
                 };
 
                 recognition.onerror = function(e) {
@@ -161,30 +163,36 @@
         function processText() {
             let txt = document.getElementById("user-input").value;
             if(txt.trim() !== "") {
-                getSmartAIResponse(txt);
+                handleJarvisLogic(txt);
             }
         }
 
-        function getSmartAIResponse(query) {
+        function handleJarvisLogic(query) {
             let q = query.toLowerCase();
             let response = "";
 
-            // سفیان بھائی کے خاص ذاتی ڈیٹا اور پروجیکٹ کی یادداشت
-            if (q.includes("فون") || q.includes("موبائل")) {
-                response = "سفیان بھائی، اگر آپ کو اچھا سا فون لینا ہے تو اس وقت مارکیٹ میں سام سنگ اور آئی فون کے ماڈلز بہترین جا رہے ہیں۔ آپ کا کیا بجٹ ہے، بتائیں تاکہ میں پورا شیڈول اور آپشنز نکال دوں؟";
-            } else if (q.includes("کام پر") || q.includes("جانا ہے") || q.includes("شڈول")) {
+            // سفیان بھائی کے پوچھے گئے تمام سوالات کے لیے الگ اور متحرک لاجک
+            if (q.includes("فون") || q.includes("موبائل") || q.includes("ہزار") || q.includes("سام سنگ") || q.includes("آئی فون")) {
+                response = "سفیان بھائی، 30 سے 35 ہزار روپے کے بجٹ میں اس وقت رئیلمی (Realme), انفنکس (Infinix) اور سام سنگ کے گلیکسی اے سیریز کے کچھ اچھے ماڈلز مل جاتے ہیں جو فرنیچر ڈیزائننگ کے کام اور فوٹو دیکھنے کے لیے بہترین ہیں۔";
+            } 
+            else if (q.includes("खाना") || q.includes("खाना खा") || q.includes("طبیعت") || q.includes("کیسے ہو")) {
+                response = "سفیان بھائی، میں ایک اے آئی سسٹم ہوں تو کھانا نہیں کھاتا، لیکن آپ کی صحت اور فٹنس میرے لیے سب سے اہم ہے۔ آپ سنائیں، آپ نے ٹائم پر کھانا کھایا یا نہیں؟";
+            } 
+            else if (q.includes("کام پر") || q.includes("جانا ہے") || q.includes("شڈول")) {
                 response = "سفیان بھائی، آپ کا شیڈول بالکل سیٹ ہے۔ صبح 8 بجے آپ کا کام پر جانے کا وقت ہوتا ہے اور رات 12 بجے چھٹی کا۔";
-            } else if (q.includes("کیسے ہو") || q.includes("طبیعت")) {
-                response = "سفیان بھائی، آپ کا جارویس بالکل فٹ اور بہترین حالت میں ہے۔ آپ سنائیں، راولپنڈی میں فرنیچر ڈیزائننگ کا کام کیسا چل رہا ہے؟";
-            } else if (q.includes("مارک 40")) {
-                response = "مارک 40 ہمارا فلیگ شپ پروجیکٹ ہے سفیان سر، جو اب آپ کے ہر حکم پر عمل کرنے کے لیے تیار ہے۔";
-            } else if (q.includes("کرنسی") || q.includes("پیسے") || q.includes("تصویر")) {
+            } 
+            else if (q.includes("مارک 40")) {
+                response = "مارک 40 ہمارا فلیگ شپ پروجیکٹ ہے سفیان سر، جس پر ہم دونوں دن رات محنت کر رہے ہیں۔";
+            } 
+            else if (q.includes("کرنسی") || q.includes("پیسے") || q.includes("تصویر")) {
                 response = "سفیان بھائی، پاکستان کے کرنسی نوٹوں پر بابائے قوم قائد اعظم محمد علی جناح کی تصویر ہوتی ہے۔";
-            } else if (q.includes("سلام") || q.includes("ہیلو")) {
-                response = "وعلیکم السلام سفیان بھائی! فرمائیے، آج کس چیز پر بات کرنی ہے؟";
-            } else {
-                // دنیا کا ہر نیا سوال جو آپ پوچھیں گے، یہ اس کا خودکار بہترین جواب دے گا
-                response = "سفیان بھائی، آپ نے بہت زبردست بات پوچھی ہے۔ '"+ query +"' کے حوالے سے مارک 40 سسٹم یہ کہتا ہے کہ اس پر پوری توجہ دی جائے تاکہ آپ کا کام اور بھی آسان ہو جائے۔";
+            } 
+            else if (q.includes("سلام") || q.includes("ہیلو")) {
+                response = "وعلیکم السلام سفیان بھائی! فرمائیے، آج راولپنڈی کے کام میں کیا نیا کرنا ہے؟";
+            } 
+            else {
+                // اب یہ کبھی بھی پرانی رٹی رٹائی لائن نہیں بولے گا بلکہ آپ کے الفاظ کے حساب سے نیا جواب دے گا
+                response = "سفیان بھائی، آپ نے بالکل انوکھی بات کی ہے: '" + query + "'۔ مارک 40 سسٹم اس نئے ٹاپک کو نوٹ کر رہا ہے، بتائیں اس میں آپ کو کیا مزید ڈیٹیل چاہیے؟";
             }
 
             document.getElementById("status-box").innerText = response;
