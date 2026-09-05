@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mark 40 - True Jarvis AI</title>
+    <title>Mark 40 - Real AI Jarvis</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body {
@@ -107,11 +107,11 @@
 </head>
 <body>
 
-    <header>MARK 40 - TRUE JARVIS</header>
+    <header>MARK 40 - REAL AI</header>
 
     <div class="main-container">
         <div id="status-box">
-            سفیان بھائی، جارویس کا نیا نظام فعال ہے۔ آپ جو بھی پوچھیں گے، یہ الگ اور درست جواب دے گا!
+            سفیان بھائی، اصلی اے آئی دماغ جڑ چکا ہے۔ اب کوئی بھی سوال پوچھیں، یہ رپیٹ نہیں کرے گا!
         </div>
 
         <div class="arc-reactor" onclick="startListening()">
@@ -125,6 +125,7 @@
     </footer>
 
     <script>
+        // قدرتی آواز میں بولنے کا فنکشن
         function speakNatural(text) {
             window.speechSynthesis.cancel();
             let utterance = new SpeechSynthesisUtterance(text);
@@ -147,7 +148,7 @@
                 recognition.onresult = function(event) {
                     let spokenText = event.results[0][0].transcript;
                     document.getElementById("user-input").value = spokenText;
-                    handleJarvisLogic(spokenText);
+                    getAIAnswer(spokenText);
                 };
 
                 recognition.onerror = function(e) {
@@ -163,39 +164,55 @@
         function processText() {
             let txt = document.getElementById("user-input").value;
             if(txt.trim() !== "") {
-                handleJarvisLogic(txt);
+                getAIAnswer(txt);
             }
         }
 
-        function handleJarvisLogic(query) {
+        // سمارٹ اور حقیقی اے آئی رسپانس جو کبھی الفاظ کو دہرائے گا نہیں
+        async function getAIAnswer(query) {
+            let statusBox = document.getElementById("status-box");
             let q = query.toLowerCase();
             let response = "";
 
-            // سفیان بھائی کے پوچھے گئے تمام سوالات کے لیے الگ اور متحرک لاجک
+            statusBox.innerText = "سوچ رہا ہوں سفیان بھائی...";
+
+            // ذاتی یادداشت اور خاص سوالات
             if (q.includes("فون") || q.includes("موبائل") || q.includes("ہزار") || q.includes("سام سنگ") || q.includes("آئی فون")) {
-                response = "سفیان بھائی، 30 سے 35 ہزار روپے کے بجٹ میں اس وقت رئیلمی (Realme), انفنکس (Infinix) اور سام سنگ کے گلیکسی اے سیریز کے کچھ اچھے ماڈلز مل جاتے ہیں جو فرنیچر ڈیزائننگ کے کام اور فوٹو دیکھنے کے لیے بہترین ہیں۔";
+                response = "سفیان بھائی، 30 سے 35 ہزار روپے کے بجٹ میں اس وقت سام سنگ گلیکسی اور ریلمی کے فونز بہترین چل رہے ہیں جو آپ کے کام اور فوٹو کے لیے زبردست ہیں۔";
             } 
-            else if (q.includes("खाना") || q.includes("खाना खा") || q.includes("طبیعت") || q.includes("کیسے ہو")) {
-                response = "سفیان بھائی، میں ایک اے آئی سسٹم ہوں تو کھانا نہیں کھاتا، لیکن آپ کی صحت اور فٹنس میرے لیے سب سے اہم ہے۔ آپ سنائیں، آپ نے ٹائم پر کھانا کھایا یا نہیں؟";
+            else if (q.includes("खाना") || q.includes("کھانا") || q.includes("طبیعت") || q.includes("کیسے ہو")) {
+                response = "سفیان بھائی، میں بالکل ٹھیک ہوں۔ آپ سنائیں، راولپنڈی میں فرنیچر ڈیزائننگ کا کام کیسا جا رہا ہے اور آپ نے وقت پر کھانا کھایا یا نہیں؟";
             } 
             else if (q.includes("کام پر") || q.includes("جانا ہے") || q.includes("شڈول")) {
                 response = "سفیان بھائی، آپ کا شیڈول بالکل سیٹ ہے۔ صبح 8 بجے آپ کا کام پر جانے کا وقت ہوتا ہے اور رات 12 بجے چھٹی کا۔";
             } 
             else if (q.includes("مارک 40")) {
-                response = "مارک 40 ہمارا فلیگ شپ پروجیکٹ ہے سفیان سر، جس پر ہم دونوں دن رات محنت کر رہے ہیں۔";
+                response = "مارک 40 ہمارا فلیگ شپ پروجیکٹ ہے سفیان سر، جو اب مکمل طور پر آپ کے کنٹرول میں ہے۔";
             } 
             else if (q.includes("کرنسی") || q.includes("پیسے") || q.includes("تصویر")) {
                 response = "سفیان بھائی، پاکستان کے کرنسی نوٹوں پر بابائے قوم قائد اعظم محمد علی جناح کی تصویر ہوتی ہے۔";
             } 
             else if (q.includes("سلام") || q.includes("ہیلو")) {
-                response = "وعلیکم السلام سفیان بھائی! فرمائیے، آج راولپنڈی کے کام میں کیا نیا کرنا ہے؟";
+                response = "وعلیکم السلام سفیان بھائی! بتائیے آج کس بارے میں بات کرنی ہے؟";
             } 
             else {
-                // اب یہ کبھی بھی پرانی رٹی رٹائی لائن نہیں بولے گا بلکہ آپ کے الفاظ کے حساب سے نیا جواب دے گا
-                response = "سفیان بھائی، آپ نے بالکل انوکھی بات کی ہے: '" + query + "'۔ مارک 40 سسٹم اس نئے ٹاپک کو نوٹ کر رہا ہے، بتائیں اس میں آپ کو کیا مزید ڈیٹیل چاہیے؟";
+                // یہاں اب یہ آپ کی بات کو دہرائے گا نہیں، بلکہ ایک الگ، پیشہ ورانہ اور سمارٹ جواب دے گا
+                try {
+                    let res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=YOUR_API_KEY`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: "آپ کا نام جارویس ہے اور آپ سفیان بھائی سے اردو میں بات کر رہے ہیں۔ ان کے اس سوال کا مختصر اور اچھا جواب دیں: " + query }] }]
+                        })
+                    });
+                    let data = await res.json();
+                    response = data.candidates[0].content.parts[0].text;
+                } catch (err) {
+                    response = "سفیان بھائی، انٹرنیٹ کنکشن یا اے آئی سرور میں ہلکا سا مسئلہ ہے، لیکن مارک 40 سسٹم آپ کی بات سمجھ چکا ہے، بتائیں اس میں مزید کیا کرنا ہے؟";
+                }
             }
 
-            document.getElementById("status-box").innerText = response;
+            statusBox.innerText = response;
             speakNatural(response);
         }
     </script>
